@@ -1,21 +1,6 @@
 import { LiveList, LiveObject } from "@liveblocks/client";
+import type {Slide} from './types/index.ts';
 
-type TextElement = {
-  id: string;
-  type: "text";
-  content: string;
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  fontSize: number;
-  color: string;
-};
-
-type Slide = {
-  id: string;
-  elements: LiveList<TextElement>;
-};
 
 declare global {
   interface Liveblocks {
