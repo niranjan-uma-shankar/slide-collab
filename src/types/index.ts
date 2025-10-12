@@ -1,4 +1,4 @@
-import { LiveList } from "@liveblocks/client";
+import { LiveList, LiveObject } from "@liveblocks/client";
 
 export type ElementType = "paragraph" | "heading1" | "heading2" | "heading3" | "numbered-list" | "bullet-list";
 
@@ -24,5 +24,5 @@ export type TextElement = {
 
 export type Slide = {
   id: string;
-  elements: LiveList<TextElement>;
+  elements: LiveList<LiveObject<TextElement>>
 };
