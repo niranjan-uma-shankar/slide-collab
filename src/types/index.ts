@@ -1,5 +1,7 @@
 import { LiveList } from "@liveblocks/client";
 
+export type ElementType = "paragraph" | "heading1" | "heading2" | "heading3" | "numbered-list" | "bullet-list";
+
 export type Document = {
   id: string;
   name: string;
@@ -9,7 +11,7 @@ export type Document = {
 
 export type TextElement = {
   id: string;
-  type: "text";
+  type: ElementType;
   content: string;
   x: number;
   y: number;

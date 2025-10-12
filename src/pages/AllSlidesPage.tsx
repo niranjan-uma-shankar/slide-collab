@@ -4,7 +4,8 @@ import {
   LiveblocksProvider,
   RoomProvider,
 } from "@liveblocks/react/suspense";
-import SlideEditor from '../components/SlideEditor.tsx';
+import { LiveList, LiveObject } from "@liveblocks/client";
+import SlideEditor from '../components/SliderEditor/index.tsx';
 import { liveblocksPublicApiKey } from '../misc/utils';
 
 export default function AllSlidesPage() {
@@ -18,9 +19,9 @@ export default function AllSlidesPage() {
             id={slug}
             initialPresence={{ cursor: null }}
             initialStorage={{
-                slides: [
-                    { id: 'slide-1', elements: [] },
-                ],
+                slides: new LiveList([
+                    new LiveObject({ id: 'slide-1', elements: new LiveList([]) }),
+                ]),
             }}
         >
             <ClientSideSuspense fallback={<LoadingScreen />}>

@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { useStorage } from "@liveblocks/react/suspense";
+import { SlideEditorToolbar } from './SlideEditorToolbar';
 
 function SlideEditor() {
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -8,6 +9,7 @@ function SlideEditor() {
     const currentSlide = slides[currentSlideIndex];
     return (
         <>
+            <SlideEditorToolbar currentSlideIndex={currentSlideIndex} />
             <div className="flex-1 overflow-auto p-8 flex items-center justify-center bg-gray-50">
                 <div
                     ref={canvasRef}
