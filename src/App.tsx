@@ -1,4 +1,5 @@
 import HomePage from './pages/HomePage.tsx';
+import AllSlidesPage from './pages/AllSlidesPage.tsx';
 import Root from './layouts/Root.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -9,6 +10,7 @@ function App() {
       element: <Root />,
        children: [
         { index: true, element: <HomePage /> },
+        {path: "slides/:slug", element: <AllSlidesPage /> }
        ]
     }
   ]);

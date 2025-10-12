@@ -12,3 +12,5 @@ export const formatDate = (isoString: string) => {
     if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
     return date.toLocaleDateString();
   };
+
+  export const liveblocksPublicApiKey = import.meta.env.VITE_LIVEBLOCKS_PUBLIC_KEY || '';
