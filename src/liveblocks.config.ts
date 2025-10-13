@@ -1,7 +1,6 @@
 import { LiveList, LiveObject } from "@liveblocks/client";
 import type {Slide} from './types/index.ts';
 
-
 declare global {
   interface Liveblocks {
     Presence: {

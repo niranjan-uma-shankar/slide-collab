@@ -4,6 +4,7 @@ import { getElementDefaults, getTextFormattingOptions } from '../../misc/utils';
 import {useMutation} from "@liveblocks/react/suspense";
 import type { ElementType, TextElement } from '../../types';
 import { nanoid } from 'nanoid';
+import type { LiveObject } from '@liveblocks/client';
 
  export function TextFormattingTools({currentSlideIndex}: {currentSlideIndex: number}) {
     const [showDropdown, setShowDropdown] = useState(false);
@@ -11,32 +12,10 @@ import { nanoid } from 'nanoid';
     
     const handleClick = () => setShowDropdown(!showDropdown);
 
-    const addElement = useMutation( ({ storage }, elementType: ElementType) => {
-        const slides = storage.get('slides');
-        const slide = slides.get(currentSlideIndex);
-        if (!slide) return; // Guard against invalid index
-        const elements = slide.get('elements');
-
-        const defaults = getElementDefaults(elementType);
-        const newElement: TextElement = {
-            id: `element-${nanoid(8)}`,
-            type: elementType,
-            x: 100 + Math.random() * 100,
-            y: 100 + Math.random() * 100,
-            color: '#000000',
-            ...defaults,
-        };
-
-      elements.push(newElement);
-      setShowDropdown(false);
-    },
-    [currentSlideIndex]
-  );
-
     return (
         <div className="relative" ref={dropdownRef}>
             <AddElementButton handleClick={handleClick} />
-            {showDropdown && <ElementDropdown addElement={addElement} />}
+            {showDropdown && <ElementDropdown currentSlideIndex={currentSlideIndex} setShowDropdown={setShowDropdown} />}
         </div>
     );
  }
@@ -53,8 +32,29 @@ import { nanoid } from 'nanoid';
     );
  }
 
- function ElementDropdown({addElement}: {addElement: (type: ElementType) => void}) {
+ function ElementDropdown({currentSlideIndex, setShowDropdown}: {currentSlideIndex: number, setShowDropdown: (show: boolean) => void}) {
     const elementOptions = getTextFormattingOptions();
+    const addElement = useMutation( ({ storage }, elementType: ElementType) => {
+        const slides = storage.get('slides');
+        const slide = slides.get(currentSlideIndex);
+        if (!slide) return; // Guard against invalid index
+        const elements = slide.get('elements');
+
+        const defaults = getElementDefaults(elementType);
+        const newElement: LiveObject<TextElement> = {
+            id: `element-${nanoid(8)}`,
+            type: elementType,
+            x: 100 + Math.random() * 100,
+            y: 100 + Math.random() * 100,
+            color: '#000000',
+            ...defaults,
+        };
+
+      elements.push(newElement);
+      setShowDropdown(false);
+    },
+    [currentSlideIndex]
+  );
     
     return (
         <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">

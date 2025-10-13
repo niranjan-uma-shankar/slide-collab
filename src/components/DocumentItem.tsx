@@ -1,8 +1,14 @@
+import type { Document } from '../types';
 import { FileText, Clock } from 'lucide-react';
 import { formatDate } from '../misc/utils';
-import type { Document } from '../types';
+import { useNavigate } from 'react-router-dom';
 
-function DocumentList({doc, handleDocumentClick}: {doc: Document, handleDocumentClick: (id: string) => void}) {
+export default function DocumentItem({doc}: {doc: Document}) {
+  const navigate = useNavigate();
+    const handleDocumentClick = (slug: string) => {
+        navigate(`/slides/${slug}`);
+    };
+
     return (
         <div
             key={doc.id}
@@ -28,5 +34,3 @@ function DocumentList({doc, handleDocumentClick}: {doc: Document, handleDocument
         </div>
     )
 }
-
-export default DocumentList;
