@@ -32,19 +32,15 @@ export default function HomePage() {
     navigate(`/slides/${slug}`);
   };
 
-//   // Expose createNewDocument to parent via custom event
-//   useEffect(() => {
-//     const handleCreate = () => createNewDocument();
-//     window.addEventListener('createNewDocument', handleCreate);
-//     return () => window.removeEventListener('createNewDocument', handleCreate);
-//   }, [documents]);
-
-  
-
   return (
     <main className="flex-1 overflow-auto p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">My Decks</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">My Decks</h1>
+          <div>
+            <NewDocumentButton handleClick={createNewDocument} />
+          </div>
+        </div>
 
         {documents.length === 0 ? 
             <EmptyHome handleCreateDocument={createNewDocument} /> :
@@ -55,18 +51,24 @@ export default function HomePage() {
   );
 }
 
+function NewDocumentButton({handleClick}: {handleClick: () => void}) {
+    return (
+        <button
+              onClick={handleClick}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+            >
+              <Plus size={20} />
+              New Deck
+            </button>
+    );
+}
+
 function EmptyHome ({handleCreateDocument} : {handleCreateDocument: () => void}) {
     return (
         <div className="text-center py-16">
             <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <h2 className="text-xl font-semibold text-gray-700 mb-2">Start creating content</h2>
-            <button
-              onClick={handleCreateDocument}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Plus size={20} />
-              Create New Presentation
-            </button>
+            <NewDocumentButton handleClick={handleCreateDocument} />
           </div>
     );
 }

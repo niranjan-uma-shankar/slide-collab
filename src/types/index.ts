@@ -26,3 +26,7 @@ export type Slide = {
   id: string;
   elements: LiveList<LiveObject<TextElement>>
 };
+
+export type SlideEditorProps = {
+  viewMode: 'all' | 'single';
+};

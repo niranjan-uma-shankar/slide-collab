@@ -21,10 +21,6 @@ export default function DocumentItem({doc}: {doc: Document}) {
           <div className="p-4">
             <h3 className="font-semibold text-gray-900 mb-2 truncate">{doc.name}</h3>
             <div className="flex items-center gap-4 text-sm text-gray-500">
-              <span className="flex items-center gap-1">
-                <FileText size={14} />
-                {doc.slideCount} slides
-                </span>
                 <span className="flex items-center gap-1">
                 <Clock size={14} />
                 {formatDate(doc.createdAt)}

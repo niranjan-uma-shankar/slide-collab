@@ -32,18 +32,18 @@ export const formatDate = (isoString: string) => {
   export const getElementDefaults = (type: ElementType) => {
     switch (type) {
       case 'heading1':
-        return { content: 'Heading 1', fontSize: 48, width: 400, height: 60 };
+        return { content: 'Heading 1', fontSize: 48, width: 300, height: 40 };
       case 'heading2':
-        return { content: 'Heading 2', fontSize: 36, width: 350, height: 50 };
+        return { content: 'Heading 2', fontSize: 36, width: 300, height: 40 };
       case 'heading3':
         return { content: 'Heading 3', fontSize: 28, width: 300, height: 40 };
       case 'paragraph':
-        return { content: 'Double click to edit', fontSize: 18, width: 400, height: 100 };
+        return { content: 'Double click to edit', fontSize: 18, width: 200, height: 20 };
       case 'numbered-list':
         return { 
           content: '', 
           fontSize: 18, 
-          width: 400, 
+          width: 200, 
           height: 120,
           listItems: ['First item', 'Second item', 'Third item']
         };
@@ -51,11 +51,11 @@ export const formatDate = (isoString: string) => {
         return { 
           content: '', 
           fontSize: 18, 
-          width: 400, 
+          width: 200, 
           height: 120,
           listItems: ['First item', 'Second item', 'Third item']
         };
       default:
-        return { content: 'Text', fontSize: 24, width: 200, height: 50 };
+        return { content: 'Text', fontSize: 24, width: 200, height: 20 };
     }
   };
