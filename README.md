@@ -2,9 +2,9 @@
 
 A real-time collaborative presentation editor built with React and Liveblocks. Multiple users can edit slides simultaneously with live updates, undo/redo functionality, and shareable links.
 
-🔗[Live demo](https://slide-collab.vercel.app/)
+🔗 [Live demo](https://slide-collab.vercel.app/)
 
-<img src="https://cloudup.com/cp8UaP7LLyG">
+<img width="1695" height="763" alt="Screenshot 2025-10-15 at 11 35 40 PM" src="https://github.com/user-attachments/assets/f8aa4f5c-429e-4fe2-ba01-79befd78c200" />
 
 # Installation
 
