@@ -6,7 +6,7 @@ function SlideCanvas({
     elements,
     currentSlideIndex,
     selectedElement,
-    setSelectedElement
+    setSelectedElement,
 }: {
     elements: TextElement[];
     currentSlideIndex: number;
@@ -16,25 +16,24 @@ function SlideCanvas({
     const { resume, pause } = useHistory();
     const [draggedElement, setDraggedElement] = useState<string | null>(null);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-    const [innerHTMLBeforeEdit, setInnerHTMLBeforeEdit] = useState<string>('');
     const canvasRef = useRef<HTMLDivElement>(null);
 
     const updateElement = useMutation(({ storage }, elementId: string, updates: Partial<TextElement>) => {
-            const slides = storage.get('slides');
-            const slide = slides.get(currentSlideIndex);
-            if (!slide) return;
-            const elements = slide.get('elements');
+        const slides = storage.get('slides');
+        const slide = slides.get(currentSlideIndex);
+        if (!slide) return;
+        const elements = slide.get('elements');
 
-            const index = elements.findIndex((el) => el.get('id') === elementId);
-            const element = elements.get(index);
-            if (!element) return;
-            Object.entries(updates).forEach(([key, value]) => {
-                element.set(key as keyof TextElement, value);
-            });
-        },
-    [currentSlideIndex]
+        const index = elements.findIndex((el) => el.get('id') === elementId);
+        const element = elements.get(index);
+        if (!element) return;
+        Object.entries(updates).forEach(([key, value]) => {
+            element.set(key as keyof TextElement, value);
+        });
+      },
+      [currentSlideIndex]
     );
-
+    
     const handleCanvasPointerMove = useCallback((e: React.PointerEvent) => {
         if (!draggedElement || !canvasRef.current) return;
 
@@ -53,52 +52,72 @@ function SlideCanvas({
         resume();
     };
 
-  const handleBlur = (e: React.FocusEvent, elementId: string, element: TextElement) => {
-    const target = e.target as HTMLElement;
-    target.contentEditable = 'false';
+    const handleBlur = (e: React.FocusEvent, elementId: string, element: TextElement) => {
+      const target = e.target as HTMLElement;
+      target.contentEditable = 'false';
   
-    if (element.type === 'numbered-list' || element.type === 'bullet-list') {
-      // Parse only the <li> elements from the list
-      const items = Array.from(target.querySelectorAll('li'))
-        .map(li => li.textContent?.trim() || '')
-        .filter(item => item.length > 0);
-    
-      updateElement(elementId, { listItems: items });
-    } else {
-      updateElement(elementId, { content: target.textContent || '' });
-    }
-};
-
-  const handleDoubleClick = (e: React.MouseEvent, element: TextElement) => {
-    e.stopPropagation();
-    const wrapper = e.currentTarget as HTMLElement;
-  
-    if (element.type === 'numbered-list' || element.type === 'bullet-list') {
-      // For lists, make the <ol> or <ul> editable, not the wrapper
-      const listElement = wrapper.querySelector('ol, ul') as HTMLElement;
-      if (listElement) {
-        listElement.contentEditable = 'true';
-        listElement.focus();
+      if (element.type === 'numbered-list' || element.type === 'bullet-list') {
+        let items: string[] = [];
+      
+        // First, try to find existing <li> elements
+        const liElements = target.querySelectorAll('li');
+      
+        if (liElements.length > 0) {
+          // Normal case: has <li> elements
+          items = Array.from(liElements)
+            .map(li => li.textContent?.trim() || '')
+            .filter(item => item.length > 0);
+        } else {
+          // Edge case: User typed directly in <ol>/<ul> without <li>
+          const textContent = target.textContent?.trim() || '';
+        
+          if (textContent.length > 0) {
+            // Split by newlines - each line becomes a list item
+            items = textContent
+              .split('\n')
+              .map(line => line.trim())
+              .filter(line => line.length > 0);
+          }
+        }
+      
+        updateElement(elementId, { listItems: items });
+      } else {
+        const content = target.textContent?.trim() || '';
+      
+        updateElement(elementId, { content });
       }
-    } else {
-      // For text elements, make wrapper editable
-      wrapper.contentEditable = 'true';
-      wrapper.focus();
-    }
-  };
+    };
 
-  const handlePointerDown = (e: React.MouseEvent, element: TextElement) => {
-    if ((e.currentTarget as HTMLElement).contentEditable === 'true') return;
-      pause();
-      setSelectedElement(element.id);
-      setDraggedElement(element.id);
+    const handleDoubleClick = (e: React.MouseEvent, element: TextElement) => {
+      e.stopPropagation();
+      const wrapper = e.currentTarget as HTMLElement;
+  
+      if (element.type === 'numbered-list' || element.type === 'bullet-list') {
+        // For lists, make the <ol> or <ul> editable, not the wrapper
+        const listElement = wrapper.querySelector('ol, ul') as HTMLElement;
+        if (listElement) {
+          listElement.contentEditable = 'true';
+          listElement.focus();
+        }
+      } else {
+        // For text elements, make wrapper editable
+        wrapper.contentEditable = 'true';
+        wrapper.focus();
+      }
+    };
 
-      const rect = e.currentTarget.getBoundingClientRect();
-      setDragOffset({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      });
-  };
+    const handlePointerDown = (e: React.MouseEvent, element: TextElement) => {
+      if ((e.currentTarget as HTMLElement).contentEditable === 'true') return;
+        pause();
+        setSelectedElement(element.id);
+        setDraggedElement(element.id);
+
+        const rect = e.currentTarget.getBoundingClientRect();
+        setDragOffset({
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+        });
+    };
 
     return (
         <div
@@ -175,6 +194,6 @@ const renderElement = (element: TextElement) => {
     }
 
     return element.content;
-  }
+}
 
-  export default SlideCanvas;
+export default SlideCanvas;

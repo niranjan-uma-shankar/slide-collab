@@ -9,6 +9,7 @@ function App() {
     {
       path: "/",
       element: <Root />,
+      errorElement: <ErrorPage />,
        children: [
         { index: true, element: <HomePage /> },
        ]
@@ -16,6 +17,7 @@ function App() {
     {
       path: "/",
       element: <Root viewMode="editor" />,
+      errorElement: <ErrorPage />,
        children: [
         {path: "slides/:slug", element: <AllSlidesPage /> },
         { path: 'slides/:slug/:slideId', element: <SingleSlidePage /> }
@@ -25,6 +27,15 @@ function App() {
   
   return (
     <RouterProvider router={router} />
+  );
+}
+
+function ErrorPage() {
+  return (
+    <div id="error-page" className="flex flex-col items-center justify-center min-h-screen">
+      <h1>Oops!</h1>
+      <p>Sorry, an unexpected error has occurred.</p>
+    </div>
   );
 }
 

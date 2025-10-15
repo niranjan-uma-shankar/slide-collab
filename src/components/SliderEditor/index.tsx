@@ -16,7 +16,7 @@ function SlideEditor() {
 
     if (slideId && slideIndex === -1) {
       if ( searchParams.get('share') ) {
-        return <div className="flex-1 overflow-auto p-8 flex items-center justify-center bg-gray-50">Slide not found</div>;
+        return <EmptyState content="Slide not found" />;
       }
 
       return null;
@@ -25,7 +25,7 @@ function SlideEditor() {
     const currentSlide = slides[slideIndex];
 
     if ( !currentSlide ) {
-        return <div className="flex-1 overflow-auto p-8 flex items-center justify-center bg-gray-50">Add a slide from the sidebar</div>;
+        return <EmptyState content="Add a slide from the sidebar" />;
     }
 
     return (
@@ -46,6 +46,22 @@ function SlideEditor() {
             </div>
         </>
     );
+}
+
+function EmptyState({content}:{content: string}) {
+  return (
+    <>
+      <SlideEditorToolbar
+              currentSlideIndex={-1}
+              currentSlideId={''}
+              selectedElement={null}
+              setSelectedElement={() => null}
+            />
+    <div className="flex-1 overflow-auto p-8 flex items-center justify-center bg-gray-50">
+        {content}
+    </div>
+    </>
+  );
 }
 
 export default SlideEditor;

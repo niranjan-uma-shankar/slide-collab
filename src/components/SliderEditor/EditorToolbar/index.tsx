@@ -20,20 +20,20 @@ export default function SlideEditorToolbar({
             <div className="flex-1" />
             <Undo />
             <Redo />
-            <TextFormattingTools currentSlideIndex={currentSlideIndex} />
-            <DeleteElementButton
-              currentSlideIndex={currentSlideIndex}
-              selectedElement={selectedElement}
-              setSelectedElement={setSelectedElement}
-            />
+            {currentSlideIndex !== -1 && (
+              <>
+                <TextFormattingTools currentSlideIndex={currentSlideIndex} />
+                <DeleteElementButton
+                  currentSlideIndex={currentSlideIndex}
+                  selectedElement={selectedElement}
+                  setSelectedElement={setSelectedElement}
+                />
+              </>
+            )}
             
             <div className="flex-1" />
 
-            <ShareButtons currentSlideId={currentSlideId} />
-
-        <div className="flex gap-2 ml-4">
-          
-        </div>
+            {currentSlideIndex !== -1 && <ShareButtons currentSlideId={currentSlideId} />}
       </div>
     );
 }
