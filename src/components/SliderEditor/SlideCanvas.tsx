@@ -53,41 +53,39 @@ function SlideCanvas({
         resume();
     };
 
-    const handleBlur = (e: React.FocusEvent, elementId: string, element: TextElement) => {
-  const target = e.target as HTMLElement;
-  target.contentEditable = 'false';
+  const handleBlur = (e: React.FocusEvent, elementId: string, element: TextElement) => {
+    const target = e.target as HTMLElement;
+    target.contentEditable = 'false';
   
-  if (element.type === 'numbered-list' || element.type === 'bullet-list') {
-    // Parse only the <li> elements from the list
-    const items = Array.from(target.querySelectorAll('li'))
-      .map(li => li.textContent?.trim() || '')
-      .filter(item => item.length > 0);
-    // target.innerHTML = innerHTMLBeforeEdit;
-    updateElement(elementId, { listItems: items });
-  } else {
-    //  e.currentTarget.innerHTML = innerHTMLBeforeEdit;
-    updateElement(elementId, { content: target.textContent || '' });
-  }
+    if (element.type === 'numbered-list' || element.type === 'bullet-list') {
+      // Parse only the <li> elements from the list
+      const items = Array.from(target.querySelectorAll('li'))
+        .map(li => li.textContent?.trim() || '')
+        .filter(item => item.length > 0);
+    
+      updateElement(elementId, { listItems: items });
+    } else {
+      updateElement(elementId, { content: target.textContent || '' });
+    }
 };
 
-   const handleDoubleClick = (e: React.MouseEvent, element: TextElement) => {
-  e.stopPropagation();
-  const wrapper = e.currentTarget as HTMLElement;
+  const handleDoubleClick = (e: React.MouseEvent, element: TextElement) => {
+    e.stopPropagation();
+    const wrapper = e.currentTarget as HTMLElement;
   
-  if (element.type === 'numbered-list' || element.type === 'bullet-list') {
-    // For lists, make the <ol> or <ul> editable, not the wrapper
-    const listElement = wrapper.querySelector('ol, ul') as HTMLElement;
-    if (listElement) {
-      listElement.contentEditable = 'true';
-      listElement.focus();
+    if (element.type === 'numbered-list' || element.type === 'bullet-list') {
+      // For lists, make the <ol> or <ul> editable, not the wrapper
+      const listElement = wrapper.querySelector('ol, ul') as HTMLElement;
+      if (listElement) {
+        listElement.contentEditable = 'true';
+        listElement.focus();
+      }
+    } else {
+      // For text elements, make wrapper editable
+      wrapper.contentEditable = 'true';
+      wrapper.focus();
     }
-  } else {
-    // For text elements, make wrapper editable
-    wrapper.contentEditable = 'true';
-    wrapper.focus();
-  }
-  setInnerHTMLBeforeEdit(wrapper.innerHTML);
-};
+  };
 
   const handlePointerDown = (e: React.MouseEvent, element: TextElement) => {
     if ((e.currentTarget as HTMLElement).contentEditable === 'true') return;
@@ -155,12 +153,10 @@ function SlideCanvas({
 
 const renderElement = (element: TextElement) => {
     if (element.type === 'numbered-list') {
-      // console.log('Rendering SlideCanvas with element and length:' + (element.listItems || []).length);
-    // console.log(element);
       return (
         <ol className="list-decimal list-inside" key={element.listItems?.join(',')}>
           {(element.listItems || []).map((item, idx) => {
-            console.log('Rendering list item:', item);
+            // console.log('Rendering list item:', item);
             return <li key={idx}>{item}</li>;
           }
         )}
@@ -170,7 +166,7 @@ const renderElement = (element: TextElement) => {
 
     if (element.type === 'bullet-list') {
       return (
-        <ul className="list-disc list-inside">
+        <ul className="list-disc list-inside" key={element.listItems?.join(',')}>
           {(element.listItems || []).map((item, idx) => (
             <li key={idx}>{item}</li>
           ))}

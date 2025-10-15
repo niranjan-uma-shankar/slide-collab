@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStorage } from '@liveblocks/react/suspense'
 
-const SidebarSlidesPreview = () => {
+const SidebarSlidesPreview = ({handleSlideFocus, handleSlideBlur}: {handleSlideFocus: () => void, handleSlideBlur: () => void}) => {
     const navigate = useNavigate();
     const slides = useStorage((root) => root.slides);
     const { slug, slideId } = useParams<{ slug: string; slideId?: string }>();
@@ -23,6 +23,7 @@ const SidebarSlidesPreview = () => {
         slides.map((slide, index) => {
             return (
                 <div
+                tabIndex={0}  
                 key={slide.id}
                 onClick={() => handleSlideSelect(index)}
                 className={`mb-3 p-3 border-2 rounded cursor-pointer transition-all ${
@@ -30,6 +31,8 @@ const SidebarSlidesPreview = () => {
                     ? 'border-blue-500 bg-blue-50'
                     : 'border-gray-200 hover:border-gray-300'
                 }`}
+                onFocus={() => handleSlideFocus()}
+                onBlur={() => handleSlideBlur()}
                 >
                     <div className="text-xs text-gray-500 mb-1">Slide {index + 1}</div>
                     <div className="bg-white border border-gray-200 rounded aspect-video flex items-center justify-center text-xs text-gray-400">

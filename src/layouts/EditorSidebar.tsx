@@ -4,11 +4,12 @@ import { useMutation } from '@liveblocks/react/suspense'
 import { nanoid } from 'nanoid';
 import { LiveList, LiveObject } from '@liveblocks/client';
 import SidebarSlidesPreview from '../components/SidebarSlidesPreview';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function EditorSidebar() {
   const navigate = useNavigate();
   const { slug, slideId } = useParams<{ slug: string; slideId?: string }>();
+  const [isSidebarSlideFocused, setIsSidebarSlideFocused] = useState(false);
   const addSlide = useMutation(({ storage }) => {
     const slides = storage.get('slides');
     const newSlide = new LiveObject({
@@ -28,7 +29,6 @@ export default function EditorSidebar() {
       
       // Navigate to previous slide or first slide
       const newIndex = Math.max(0, indexToDelete - 1);
-      console.log('New index after deletion:', newIndex);
       const newSlide = slides.get(newIndex);
       const newSlideId = newSlide ? newSlide.get('id') : null;
       
@@ -45,21 +45,30 @@ export default function EditorSidebar() {
     const handleKeyDown = (e: KeyboardEvent) => {
       console.log('Key pressed:', e.key);
       if (e.key === 'Delete' || e.key === 'Backspace') {
-        // Only delete if not editing an element
-        const activeElement = document.activeElement;
-        const isEditingElement = activeElement?.getAttribute('contenteditable') === 'true';
-        console.log('Delete key pressed. isEditingElement:', isEditingElement);
-        
-        if (!isEditingElement) {
-          e.preventDefault();
-          deleteSlide(slug, slideId);
+        console.log('isslidebarfocused', isSidebarSlideFocused);
+        if ( !isSidebarSlideFocused ) {
+          return;
         }
+        
+        e.preventDefault();
+        deleteSlide(slug, slideId);
+        setIsSidebarSlideFocused(false);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [deleteSlide, slideId, slug]);
+  }, [deleteSlide, isSidebarSlideFocused, slideId, slug]);
+
+  const handleSlideFocus = () => {
+    console.log('Sidebar slide focused');
+    setIsSidebarSlideFocused(true);
+  }
+
+  const handleSlideBlur = () => {
+    console.log('Sidebar slide blurred');
+    setIsSidebarSlideFocused(false);
+  }
 
   return (
     <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
@@ -84,7 +93,7 @@ export default function EditorSidebar() {
             <Plus size={16} />
           </button>
         </div>
-        <SidebarSlidesPreview />
+        <SidebarSlidesPreview handleSlideFocus={handleSlideFocus} handleSlideBlur={handleSlideBlur} />
       </div>
     </div>
   );
