@@ -37,9 +37,11 @@ export default function HomePage() {
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">My Decks</h1>
-          <div>
-            <NewDocumentButton handleClick={createNewDocument} />
-          </div>
+          {documents.length > 0 && (
+            <div>
+              <NewDocumentButton handleClick={createNewDocument} />
+            </div>
+          )}
         </div>
 
         {documents.length === 0 ? 
@@ -55,9 +57,9 @@ function NewDocumentButton({handleClick}: {handleClick: () => void}) {
     return (
         <button
               onClick={handleClick}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
             >
-              <Plus size={20} />
+              <Plus size={16} />
               New Deck
             </button>
     );
