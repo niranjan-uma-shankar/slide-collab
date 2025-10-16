@@ -175,7 +175,6 @@ const renderElement = (element: TextElement) => {
       return (
         <ol className="list-decimal list-inside" key={element.listItems?.join(',')}>
           {(element.listItems || []).map((item, idx) => {
-            // console.log('Rendering list item:', item);
             return <li key={idx}>{item}</li>;
           }
         )}

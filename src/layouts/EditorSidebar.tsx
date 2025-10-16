@@ -21,7 +21,6 @@ export default function EditorSidebar() {
   const deleteSlide = useMutation(
     ({ storage }, slug, slideId) => {
       const slides = storage.get('slides');
-      console.log('slideID to delete:', slideId);
 
       const indexToDelete = !slideId ? 0 : slides.findIndex((s) => s.get('id') === slideId);
       if (indexToDelete === -1) return;
